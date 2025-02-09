@@ -1,15 +1,18 @@
-from flask import Flask, render_template, request
+import os
+import json
 import gspread
+from flask import Flask, render_template, request, redirect, url_for
 from google.oauth2.service_account import Credentials
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
+# Configuración de la aplicación Flask
 app = Flask (__name__)
-app.secret_key = "tu_clave_secreta_aqui"
+app.secret_key = "91185032" # Reemplaza por una clave segura
 
 # configuración de Falsk-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login"
+login_manager.login_view = "login" # Redirige a la página segura de login si se requiere autenticación
 
 # Modelo de usuario sencillo
 class User(UserMixin):
@@ -32,17 +35,30 @@ def load_user(user_id):
         
     return None         
 
-#Configuración de la API de Google Sheets
-SCOPE = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-CREDS = Credentials.from_service_account_file(r"C:\Users\Sevicol\OneDrive\Escritorio\Entorno_Wed_Reportes\credentials\credenciales.json", scopes=SCOPE)
+#Configuración de Google Sheets usando variables de entorno
+SCOPE = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+    ]
+
+# Cargar las credenciales desde la variable de entorno "GOOGLE_CREDENTIALS"
+credentials_json = os.environ.get("GOOGLE_CREDENTIALS")
+if not credentials_json:
+    raise Exception("La variable de entorno 'GOOGLE_CREDENTIALS' no está definida.")
+
+# Convertir el JSON en un diccionario
+credentials_info = json.loads(credentials_json)
+
+# Crear las credenciales a partir de la información de la cuenta de servicio    
+CREDS = Credentials.from_service_account_info(credentials_info", scopes=SCOPE)
 
 client = gspread.authorize(CREDS)
 
-#Reemplaza "tu_sheet_id_aquí" con  el ID real de hoja de cálculo
+# Reemplaza "tu_sheet_id_aquí" con  el ID real de hoja de cálculo
 SPREADSHEET_ID = "1ev_ziJEksMDOqPDklDQuU4777HTjIvBFGWnnBpFLI2k"
 sheet = client.open_by_key(SPREADSHEET_ID).sheet1
 
-#Página de inicio
+# Rutas de la aplicación
 @app.route('/')
 def home():
     return "¡Hola, Flask está funcionando!"
@@ -56,7 +72,7 @@ def login():
         user = users.get(username)
         if user and user.password == password:
             login_user(user)
-            return f"Bienvenido, {username}!"
+            return redirect(url_for("home"))
         else:
             return "Credenciales incorrectas", 401
     return render_template("login.html")
@@ -66,7 +82,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return "Has cerrado sesión."    
+    return redirect(url_for("home"))   
    
 # Página para realizar reportes (acceso restringido)
 @app.route('/reportar', methods=['GET', 'POST'])
