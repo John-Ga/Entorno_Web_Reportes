@@ -137,6 +137,15 @@ def listareportes():
     # Renderiza la plantilla 'listareportes.html'con variable 'reports'
     return render_template("listareportes.html", reports=reports)
 
+@app.route("/admin")
+@login_required
+def admin_dashboard():
+    # Obtener todos los reportes desde la hoja de cálculo
+    reports = sheet.get_all_values()
+    # Calcular total reportes (asumiend cada reporte es una fila)
+    total_reports = len(reports)
+    return render_template("admin_dashboard.html", total_reports=total_reports)
+
 
 if __name__ == "__main__":
     import os

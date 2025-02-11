@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de Administración{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Panel de Administración</h2>
+    <div class="row">
+        <!-- Tarjeta de Reportes -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total de Reportes</h5>
+                    <p class="card-text">{{ total_reports }}</p>
+                    <a href="{{ url_for('listareportes') }}" class="btn btn-primary">Ver Reportes</a>
+                </div>
+            </div>
+        </div>
+        <!-- Aquí puedes agregar más tarjetas para otras métricas o acciones -->
+    </div>
+</div>
+{% endblock %}
