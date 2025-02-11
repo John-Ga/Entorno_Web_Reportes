@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reportar Incidente</title>
-</head>
-<body>
-    <h1>Formulario de Reporte</h1>
-    <form action="/reportar" method="post">
-        <label for="reporte">Descripción del reporte:</label>
-        <textarea id="reporte" name="reporte" required></textarea>
-        <br>
-        <button type="submit">Enviar Reporte</button>
+{% extends "base.html" %}
+
+{% block title %}Reportar Incidente{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Reportar Incidente</h2>
+    <form action="{{ url_for('reportar') }}" method="post">
+        <div class="form-group">
+            <label for="reporte">Descripción del reporte:</label>
+            <textarea class="form-control" id="reporte" name="reporte" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Enviar Reporte</button>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}
+

@@ -1,41 +1,29 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Reportes</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 80%;
-            margin: 20px auto;
-        }
-        th, td{
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;    
-        }
-        th{
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>Lista de Reportes</h1>
-    <table>
-        <thead>
+{% extends "base.html" %}
+
+{% block title %}Listado de Reportes{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Listado de Reportes</h2>
+    {% if reports %}
+    <table class="table table-striped">
+        <thead class="thead-dark">
             <tr>
+                <th>#</th>
                 <th>Reporte</th>
             </tr>
         </thead>
         <tbody>
             {% for report in reports %}
-                 <tr>
-                    <!--Suponinedo que cada fila es una lista con el reporte en la primera columna-->
-                    <td>{{ report [0] }}</td>
-                 </tr>
-            {% endfor %}     
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ report[0] }}</td>
+            </tr>
+            {% endfor %}
         </tbody>
-    </table>    
-</body>
-</html>
+    </table>
+    {% else %}
+    <p>No hay reportes disponibles.</p>
+    {% endif %}
+</div>
+{% endblock %}
