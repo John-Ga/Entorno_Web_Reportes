@@ -11,6 +11,7 @@
             <tr>
                 <th>#</th>
                 <th>Reporte</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -18,6 +19,11 @@
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ report[0] }}</td>
+                <td>
+                    <!-- Enlace para eliminar el reporte. 
+                         Se asume que 'loop.index' corresponde a la fila en la hoja. -->
+                    <a href="{{ url_for('eliminar_reporte', row=loop.index) }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este reporte?');">Eliminar</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

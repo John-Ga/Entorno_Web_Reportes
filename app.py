@@ -137,6 +137,19 @@ def listareportes():
     # Renderiza la plantilla 'listareportes.html'con variable 'reports'
     return render_template("listareportes.html", reports=reports)
 
+@app.route("/eliminar_reporte/<int:row>")
+@login_required
+def eliminar_reporte(row):
+    try:
+        # Elimina la fila correspondiente en la hoja de cálculo.
+        # Nota: hoja tiene encabezado, datos comienzan en la fila 2,
+        # quizás debas ajustar el índice: por ejemplo, row + 1.
+        sheet.delete_rows(row)
+        return redirect(url_for("listareportes"))
+    except Exception as e:
+        return f"Error al eliminar el reporte: {str(e)}", 500
+
+
 @app.route("/admin")
 @login_required
 def admin_dashboard():
